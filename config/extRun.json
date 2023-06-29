@@ -1,0 +1,4 @@
+{
+    "extensions":"run_shell_command",
+    ".py":"py "
+}

@@ -1,101 +1,15 @@
-import os, subprocess, json
+import os, subprocess, json, runErrors
 
-# def removespaces(st):
-#     strippedstr = ""
-#     for v in st:
-#         if v != " ":
-#             strippedstr = strippedstr+v
-#     return strippedstr
+# JSON parsing
+def configAction(action, file, value):
+    if action == "read":
+        with open(file+".json", "r") as f:
+            pass
+    if action == "write":
+            json.dump(value, file)
 
-# def convertstringstopython(st):
-#     table = ["0","1","2","3","4","5","6","7","8","9"]
-#     isdig = True
-#     istable = False
-#     for v in st:
-#         if v not in table:
-#             isdig = False
-#             break
-
-#     if ("[" in st and "]" in st and "," in st) or ("[" in st and "]" in st):
-#         istable = True
-
-#     if st == "True":
-#         st = True
-#     elif st == "False":
-#         st = False
-#     elif isdig == True:
-#         st = int(st)
-#     elif istable == True:
-#         tab = []
-#         builtvalue = ""
-#         for v in st:
-#             if v != "[" and v != "]":
-#                 if v == ",":
-#                     tab.append(convertstringstopython(removespaces(builtvalue)))
-#                     builtvalue = ""
-#                 else:
-#                     builtvalue = builtvalue+v
-#             elif builtvalue != "" and v == "]":
-#                 tab.append(convertstringstopython(removespaces(builtvalue)))
-#                 builtvalue = ""
-#         st = tab
-#     return st
-
-# def first_chars(file):
-#     file.seek(0)
-#     return file.readlines()
-
-# def getbrshattrib(line):
-#         retline = ""
-#         constructstring = ""
-#         hitequalssign = False
-#         for c in removespaces(line):
-#             if hitequalssign == False:
-#                 if c != "=" and c != " ":
-#                     constructstring = constructstring+c
-#                 else:
-#                     if c == "=":
-#                         hitequalssign = True
-#             else:
-#                 retline = retline+c
-#         return [removespaces(constructstring),removespaces(retline)]
-
-# def readconfig(readproperty,default,file):
-#     for v in first_chars(file):
-#         cfgproperty = v
-#         if getbrshattrib(cfgproperty)[0] == readproperty:
-#             file.seek(0)
-#             return removespaces(convertstringstopython(getbrshattrib(cfgproperty)[1]).split()[0])
-#     file.seek(0)
-#     return default
-
-# def setconfig(attribute,value,file):
-#     owoo = ""
-#     foundvalue = False
-#     lines = first_chars(file)
-#     for v in lines:
-#         if v != "":
-#             cfgproperty = v
-#             if getbrshattrib(cfgproperty)[0] == attribute:
-#                 owoo = owoo+getbrshattrib(cfgproperty)[0]+" = "+str(value)+"\n"
-#                 foundvalue = True
-#             else:
-#                 owoo = owoo+v+"\n"
-#     if foundvalue == False:
-#         print("value not in file")
-#         owoo = owoo+attribute+" = "+str(value)
-#     owo = ""
-#     for v in owoo.splitlines():
-#         if removespaces(v) != "":
-#             owo = owo+v+"\n"
-#     file.seek(0)
-#     file.write("")
-#     file.flush()
-#     file.write(owo)
-#     file.flush()
-
-#JSON parsing
-def configAction(action, value):
+# Get the run files
+def getRunFiles():
     pass
 
 def reloadRunnable():
@@ -105,21 +19,63 @@ def reloadRunnable():
     runningDirectoryFiles.remove("main.py")
     print(runningDirectoryFiles)
 
-def modifySubproc():
+def modifySubproc(file, newState):
     # https://docs.python.org/3/library/subprocess.html
-    for bark in range(0, len(runFiles)):
+    # for bark in range(0, len(runFiles)):
+    #     try:
+    #         #start subproc
+    #         pass
+    #     except:
+    #         #go to next item in list
+    #         print(f'ERROR STARTING SUBPROCESS WITH: {bark}; EXCEPTION: {Exception}')
+    #         continue
+    # return "done"
+    setState = "b"
+    if newState == setState:
+        print("No changes, same state :3")
+    elif newState == "on":
         try:
-            #start subproc
             pass
         except:
-            #go to next item in list
-            print(f'ERROR STARTING SUBPROCESS WITH: {bark}; EXCEPTION: {Exception}')
-            continue
-    return "done"
+            print("ERROR")
+    elif newState == "off":
+        pass
 
+def startPY(paff):
+    commandToStart = f'py {paff}'
+    try:
+        subprocess.run(args=commandToStart, capture_output=True)
+    except:
+        exit("SERIOUS FILE ERROR! FILE IS BROKEN.")
 
 # Setup
 # reloadRunnable()
 
 # This just verifies that stuff works
-runFiles = ["awoooooo\main.py","doggy\main.py"]
+runFilesPy = ["awoooooo\main.py","doggy\main.py"]
+processes = []
+
+for file_path in runFilesPy:
+    print(f"Processing file: {file_path}")
+
+    command = ['python', file_path]  # Assuming you are running Python scripts
+
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    processes.append(process)
+
+for process in processes:
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            print(output.strip())
+
+    process.wait()
+    print("\n")  # Add a newline to separate the output of each file
+
+# Forever loop
+# import time
+# bark = True
+# while bark:
+#     time.sleep(0.025)
