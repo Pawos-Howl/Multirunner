@@ -1,11 +1,11 @@
 print("doggy run :3")
 
-import time, os
-f = os.open("bap.txt", "w+")
-# f.read()
-print(f)
-f.append("*boop*\n")
+f = open("bap.txt", "w+")
+text = f.read()
+text = text + "*boop*\n"
+f.write(text)
 f.close()
+import time
 while True:
     time.sleep(1)
     print("arf")
