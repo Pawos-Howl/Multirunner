@@ -63,8 +63,9 @@ for file_path in runFilesPy:
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     processes.append(process)
 
-for process in processes:
-    while True:
+import time
+while True:
+    for process in processes:
         output = process.stdout.readline()
         if output == '' and process.poll() is not None:
             break
@@ -73,9 +74,4 @@ for process in processes:
 
     process.wait()
     print("\n")  # Add a newline to separate the output of each file
-
-# Forever loop
-# import time
-# bark = True
-# while bark:
-#     time.sleep(0.025)
+    time.sleep(0.025)
