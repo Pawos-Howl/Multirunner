@@ -1,5 +1,0 @@
-{
-    "runFiles":"config\\files.json",
-    "fileExtensions":"config\\fileTag.json",
-    "unrecognizedParsing":"config\\extRun.json"
-}

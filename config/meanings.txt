@@ -1,4 +1,4 @@
-"locations.json" is the file that houses the paths for everything. It is not needed, and was mostly there for me to replace this, for some reason.
+The following is an explaination on the configs
 "etcRun.json" is how the program will make the subprocess. the actual terminal lines of code that are used to run it.
 "fileTag.json" is the list of files that the code will look for and use to run as subprocesses.
-"sysFiles.json" is the 
+"sysFiles.json" is the list of files that the program has made itself. It reads the list of the keys and will either turn a process on or off from the list. Throwing an error if it isn't "enable" or "disable".
