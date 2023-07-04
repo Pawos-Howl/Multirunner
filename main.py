@@ -1,4 +1,4 @@
-import os, subprocess, json, runErrors, select
+import os, subprocess, json, runErrors, time
 
 # JSON parsing
 def configAction(action, file, value):
@@ -12,8 +12,13 @@ def reloadRunnable():
     # os.chdir(".")
     runningDirectoryFiles = os.listdir(".")
     #Remove the included stuff
-    runningDirectoryFiles.remove("main.py")
+    systemFiles = ['main.py', 'runErrors.py', 'config/']
+    for item in systemFiles:
+        # runningDirectoryFiles.remove(item)
+        print(item)
+    # runningDirectoryFiles.remove("main.py")
     print(runningDirectoryFiles)
+    # return runningDirectoryFiles
 
 def modifySubproc(file, newState, runningProcesses):
     # https://docs.python.org/3/library/subprocess.html
@@ -26,10 +31,10 @@ def modifySubproc(file, newState, runningProcesses):
     #         print(f'ERROR STARTING SUBPROCESS WITH: {bark}; EXCEPTION: {Exception}')
     #         continue
     # return "done"
-    if file in runningProcesses:
-        setState = "enable"
-    elif file not in runningProcesses: setState = "disable"
-    setState = "b"
+    if file in runningProcesses:setState = "enable"
+    # elif file not in runningProcesses: setState = "disable"
+    else: setState = "disable"
+    # setState = "b"
     if newState == setState:
         print(f'No changes to process "{file}", same state :3')
     elif newState == "enable":
@@ -40,13 +45,14 @@ def modifySubproc(file, newState, runningProcesses):
     elif newState == "disable":
         pass
     else:
-        raise runErrors.notValidState(file, newState)
+        raise runErrors.NotValidState(file, newState)
 
 # Setup
-# reloadRunnable()
+reloadRunnable()
 
 # This just verifies that stuff works
 runFilesPy = ["awoooooo\main.py","doggy\main.py"]
+# runFiles = runFilesPy
 processes = []
 
 for file_path in runFilesPy:
@@ -54,25 +60,27 @@ for file_path in runFilesPy:
 
     command = ['python', file_path]  # Assuming you are running Python scripts
 
-    try:
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
-        processes.append(process)
-    except FileNotFoundError:
-        ## Assumes (its bad to assume) 
-        raise runErrors.UnableToRun()
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    processes.append(process)
 
-# Read output from subprocesses in a non-blocking manner
-while processes:
-    readable, _, _ = select.select(processes, [], [])
-
-    for process in readable:
+while True:
+    # Read output from each process and display it
+    for process in processes:
         output = process.stdout.readline()
-        if output == '':
-            processes.remove(process)
-        else:
+        if output:
+            # Print the output along with the corresponding process's arguments
             print(f"Output from {process.args}: {output.strip()}")
-            # You can modify or process the output as needed
 
-# Wait for all subprocesses to finish
-for process in processes:
-    process.wait()
+    # Example: Sleep for a short period before checking for output again
+    time.sleep(0.025)
+
+# while processes:
+#     for process in processes:
+#         output = process.stdout.readline()
+#         if output == '':
+#             # Process has terminated
+#             # processes.remove(process)
+#             pass
+#         else:
+#             # Print the output along with the corresponding process's arguments
+#             print(f"Output from {process.args}: {output.strip()}")
