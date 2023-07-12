@@ -1,0 +1,9 @@
+{
+    "startCommand":{
+        "extensions":"run_shell_command",
+        ".py":"py "
+    },
+    "fileNames":[
+        "main.py"
+    ]
+}

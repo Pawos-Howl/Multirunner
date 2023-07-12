@@ -1,4 +1,3 @@
 The following is an explaination on the configs
-"etcRun.json" is how the program will make the subprocess. the actual terminal lines of code that are used to run it.
-"fileTag.json" is the list of files that the code will look for and use to run as subprocesses.
+"config.json" has a list in it for the filenames that will be found and run and the command to run them in terminal by subprocess
 "sysFiles.json" is the list of files that the program has made itself. It reads the list of the keys and will either turn a process on or off from the list. Throwing an error if it isn't "enable" or "disable".

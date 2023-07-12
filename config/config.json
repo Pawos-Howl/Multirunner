@@ -1,0 +1,8 @@
+{
+    "startCommand":{
+        ".py":"py "
+    },
+    "fileNames":[
+        "main.py"
+    ]
+}
