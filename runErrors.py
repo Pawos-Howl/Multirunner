@@ -3,8 +3,7 @@ class UnableToRun(Exception):
     def __init__(self, runCommand, fileErrored, errorMessage):
         self.commandRun = runCommand
         self.file = fileErrored
-        errorMessage = f'ERROR: COMMAND "{self.commandRun}" IS NOT VALID TO RUN FILE "{self.file}"'
-        self.error = errorMessage
+        self.error = f'ERROR: COMMAND "{self.commandRun}" IS NOT VALID TO RUN FILE "{self.file};"ERROR: {errorMessage}'
         super().__init__(self.error)
 
 class NotValidState(Exception):
@@ -13,4 +12,10 @@ class NotValidState(Exception):
         self.errorFile = errorFile
         self.errorState = errorState
         self.errorMessage = f'ERROR: PROGRAM {self.errorFile} WAS NOT GIVEN STATE "enable" or "disable" (STATE "{self.errorState}" IS NOT VALID)'
+        super().__init__(self.errorMessage)
+
+class InvalidConfigCall(Exception):
+    """Raises an error when there is an error for calling the config"""
+    def __init__(self, action, file, subSection, errorPart: str):
+        self.errorMessage = f'CONFIG ERROR WITH ACTION "{action}" OF FILE "{file}" SUBSECTION "{subSection}"!\nERROR:{errorPart}'
         super().__init__(self.errorMessage)
